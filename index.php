@@ -174,19 +174,15 @@
 	});		
 
 	
+		// Inicio nuevo Código HVS 20160511 06:30
+
 	$app->get('/catInhabiles', function()  use ($app, $db) {
 		//$cuenta = $_SESSION["idCuentaActual"];
 		
-		$sql="SELECT p.idCuenta, p.idPrograma, p.idAuditoria auditoria,  s.nombre sujeto, o.nombre objeto, p.idPapel, p.tipoPapel, p.tipoResultado, p.resultado, ta.nombre tipo, " .
-		"CONVERT(VARCHAR(12),p.fAlta,102) fechaPapel, p.idFase fase, p.tipoPapel, p.tipoResultado, p.resultado, p.estatus  " .
-		"FROM sia_papeles p   " .
-		"LEFT JOIN sia_sujetos s on p.idSujeto=s.idSujeto " .
-		"LEFT JOIN sia_objetos o on p.idSujeto=o.idSujeto and p.idObjeto=o.idObjeto  " .
-		"LEFT JOIN sia_auditorias a on p.idAuditoria=a.idAuditoria " .
-		"LEFT JOIN sia_tiposauditoria ta on a.tipoAuditoria=ta.idTipoAuditoria  " .
-		"ORDER BY  p.idPapel DESC";
+		$sql="SELECT dh.idCuenta idCta, dh.idDia idDia, dh.tipo tipo, dh.nombre nombre, CONVERT(VARCHAR(12),dh.finicio,102) fecIni, CONVERT(VARCHAR(12),dh.ffin,102) fecFin, dh.Estatus estatus FROM sia_diashabiles dh ORDER BY  dh.idCuenta, dh.idDia DESC";				
 
 		$dbQuery = $db->prepare($sql);		
+//		$dbQuery->execute(array(':cuenta' => $cuenta));
 		$dbQuery->execute();
 		$result['datos'] = $dbQuery->fetchAll(PDO::FETCH_ASSOC);
 		if(!$result){
@@ -195,6 +191,8 @@
 			$app->render('catInhabiles.php', $result);
 		}	
 	})->name('listaInhabiles');	
+	
+	// Fin nuevo Código HVS 20160511 06:30
 	
 	
 	
